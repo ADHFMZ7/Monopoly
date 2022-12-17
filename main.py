@@ -8,5 +8,14 @@ if __name__ == "__main__":
     while True: # replace with game condition function
         
         for player in game.get_players():
-             game.take_turn(player)
+            game.take_turn(player)
+             
+
+"""
+Every turn we need to make sure 
+
+
+"""
+          
+    
              

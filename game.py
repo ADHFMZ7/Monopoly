@@ -13,10 +13,22 @@ class Game:
        
     def take_turn(self, player):
 
-        d1, d2 = [rand.randint(1, 6) for _ in range(2)]
-        self.move(player, d1+d2)
-        if d1 == d2:
-            double += 1
+        player.print_info() 
+        input("Press enter to roll dice")
+        d1, d2 = [random.randint(1, 6) for _ in range(2)]
+        #self.move(player, d1+d2)
+        print(f"{player.name} rolled {d1} and {d2}") 
+        if d1 == d2 and player.double < 3:
+            player.double += 1
+            self.take_turn(player)
+            input("You rolled a double")
+            return
+        elif player.double >= 3:
+            player.double = 0
+            print("You rolled 3 doubles. You are in jail!")
+        else:
+            player.double = 0
+            
         
     def move():
        pass 
@@ -37,9 +49,14 @@ class Player:
         self.properties = []
         self.jail = False
         self.double = 0
+        self.space = 0
 
         
-     
+    def print_info(self):
+      print(f"{self.name}'s turn")
+      print(f"Space #: {self.space}")
+      print(f"Money left: {self.money}")
+      # print properties 
 
 class Property:
    pass 
