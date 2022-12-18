@@ -16,8 +16,8 @@ class Game:
         player.print_info() 
         input("Press enter to roll dice\n")
         d1, d2 = [random.randint(1, 6) for _ in range(2)]
-        #self.move(player, d1+d2)
         input(f"{player.name} rolled a {d1} and a {d2}")
+        self.move(player, d1+d2)
         if d1 == d2 and player.double < 3:
             player.double += 1
             input("You rolled a double")
@@ -30,8 +30,13 @@ class Game:
             player.double = 0
             
         
-    def move():
-       pass 
+    def move(self, player, number):
+        if number + player.space >= 40:
+            player.space = (player.space + number) - 40
+        else:
+            player.space += number
+            
+        if player.space == 
      
     def init_board(self):
     
@@ -53,10 +58,11 @@ class Player:
 
         
     def print_info(self):
-      print(f"\n{self.name}'s turn")
-      print(f"Space #: {self.space}")
-      print(f"Money left: {self.money}")
-      # print properties 
+        print("="*30)
+        print(f"{self.name}'s turn")
+        print(f"Space #: {self.space}")
+        print(f"Money left: {self.money}")
+        # print properties 
 
 class Property:
    pass 
