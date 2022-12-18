@@ -5,10 +5,13 @@ if __name__ == "__main__":
     game = Game()    
 
 
-    while True: # replace with game condition function
+    while not game.win(): # replace with game condition function
         
         for player in game.get_players():
-            game.take_turn(player)
+            if player.jail:
+                player.jail_turn()
+            else:
+                player.take.take_turn()
             
              
 
