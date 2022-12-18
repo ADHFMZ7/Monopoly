@@ -9,7 +9,9 @@ if __name__ == "__main__":
         
         for player in game.get_players():
             game.take_turn(player)
+            
              
+
 
 """
 Every turn we need to make sure 

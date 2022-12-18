@@ -1,11 +1,11 @@
 import random
+from data import BOARD
 
 class Game:
     
     def __init__(self):
         self.players = []
-        self.board =  None
-        self.positions = {} 
+        self.board = BOARD
         self.init_board()
        
     def get_players(self):
@@ -14,14 +14,14 @@ class Game:
     def take_turn(self, player):
 
         player.print_info() 
-        input("Press enter to roll dice")
+        input("Press enter to roll dice\n")
         d1, d2 = [random.randint(1, 6) for _ in range(2)]
         #self.move(player, d1+d2)
-        print(f"{player.name} rolled {d1} and {d2}") 
+        input(f"{player.name} rolled a {d1} and a {d2}")
         if d1 == d2 and player.double < 3:
             player.double += 1
-            self.take_turn(player)
             input("You rolled a double")
+            self.take_turn(player)
             return
         elif player.double >= 3:
             player.double = 0
@@ -53,7 +53,7 @@ class Player:
 
         
     def print_info(self):
-      print(f"{self.name}'s turn")
+      print(f"\n{self.name}'s turn")
       print(f"Space #: {self.space}")
       print(f"Money left: {self.money}")
       # print properties 
@@ -62,4 +62,4 @@ class Property:
    pass 
 
 class Bank:
-   pass 
+    pass
