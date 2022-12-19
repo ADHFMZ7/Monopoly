@@ -40,29 +40,29 @@ class Player:
         self.money = 1500
         self.properties = []
         self.jail = 0
-        self.double = 0
         self.card = 0
         self.game = game
 
     def take_turn(self):
-        self.print_info() 
-        input("Press enter to roll dice\n")
-        d1, d2 = [random.randint(1, 6) for _ in range(2)]
-        input(f"{self.name} rolled a {d1} and a {d2}\nPress enter to continue")
-
-        self.move(d1+d2)
-        self.evaluate_square()
-        self.pay_rent()
-        if d1 == d2 and self.double < 3:
-            self.double += 1
-            input("You rolled a double")
-            self.take_turn()
-            return
-        elif self.double >= 3:
-            self.double = 0
-            print("You rolled 3 doubles. You are in jail!")
-        else:
-            self.double = 0 
+        double = 0
+        while True:
+            self.print_info() 
+            input("Press enter to roll dice\n")
+            d1, d2 = [random.randint(1, 6) for _ in range(2)]
+            input(f"{self.name} rolled a {d1} and a {d2}\nPress enter to continue")
+            self.move(d1+d2)
+            self.evaluate_square()
+            self.pay_rent()
+            if d1 == d2 and double < 3:
+                double += 1
+                input("You rolled a double")
+                continue    
+            elif double >= 3:
+                double = 0
+                print("You rolled 3 doubles. You are in jail!")
+                break
+            else:
+                break
         
     def print_info(self):
         print("="*30)
@@ -80,13 +80,16 @@ class Player:
             self.space += number
            
     def rand_card(self):
-        number = random.randint(1, 100)
-        if number % 2:
+        number = random.randint(1, 115)
+        if number % 2 and number < 100:
             print(f"Collect ${2 * number}")
             self.money += 2 * number
-        else:
+        elif not number % 2 and number < 100:
             print(f"Pay ${number}")
             self.pay(number, 'bank')
+        else:
+            print("You got a get out of jail free card.")
+            self.card += 1
             
             
             
@@ -193,6 +196,8 @@ class Player:
             if self.card >= 1:
                 self.jail = 0
                 self.card -= 1
+            else:
+                print("You do not have any get out of jail cards")
         else:
             print("Invalid choice. Try again.")    
             self.jail_turn()
@@ -258,6 +263,6 @@ class Player:
 
     def pay_rent(self):
         spot = BOARD[self.space]
-        if spot in PROPERTIES.keys() and PROPERTIES[spot]["owner"]:
+        if spot in PROPERTIES.keys() and PROPERTIES[spot]["owner"] and PROPERTIES[spot]["owner"] != self:
             self.pay(PROPERTIES[spot]["rent"][PROPERTIES[spot]["houses"]], PROPERTIES[spot]["owner"])
          
