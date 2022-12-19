@@ -97,7 +97,6 @@ class Player:
             self.card += 1
             
             
-            
     def evaluate_square(self):
         spot = BOARD[self.space]
         print(f"You landed on {spot}")
@@ -160,16 +159,7 @@ class Player:
             else:
                 print("Invalid input. please continue.")
                 
-                
-                    
             
-        ## LAUNCH MENU 
-        
-        ## BUY THIS PROPERTY
-        ## BUY HOUSES
-        ## END TURN
-            
-                
     def jail_turn(self):
         self.print_info() 
         if self.jail == 4:
