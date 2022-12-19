@@ -175,3 +175,4 @@ PROPERTIES = {
         "hotel_cost": 200
     }
 }
+
