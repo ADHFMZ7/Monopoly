@@ -24,8 +24,8 @@ class Game:
   
     def win(self):
         if len(self.players) <= 1:
-            print(f"{self.players[0].name} Wins!")
-            return True
+            #print(f"{self.players[0].name} Wins!")
+            return self.players[0]
     
     def remove_player(self, player):
         self.get_players().remove(player)
@@ -53,6 +53,8 @@ class Player:
             self.move(d1+d2)
             self.evaluate_square()
             self.pay_rent()
+            if self.game.win():
+                return
             if d1 == d2 and double < 3:
                 double += 1
                 input("You rolled a double")
@@ -234,7 +236,7 @@ class Player:
         
     def pay(self, amount, reciever):
         if self.money < amount:
-            self.bankrupt() 
+            self.bankrupt(reciever, amount) 
         else:
             self.money -= amount
             if reciever != "bank":
@@ -245,11 +247,13 @@ class Player:
         self.jail = 1
 
     def bankrupt(self, recipient, debt):
+        print(f"{self.name} has gone bankrupt. They will be removed from the game")
         if self.money < debt:
             for i in self.properties:
                 self.sell_property(i)
 
-            self.pay(debt, recipient)
+            print(f"Their remaining balance of {self.money} after selling their property has been given to {recipient}")
+            self.pay(self.money, recipient)
         self.game.remove_player(self) # what the fuck
 
     def sell_property(self, property):
