@@ -175,31 +175,28 @@ PROPERTIES = {
         "hotel_cost": 200
     },
     "Reading Railroad": {
-        "price": 400,
-        "rent": [25, 50, 100, 200],
-        "house_cost": 200,
-        "hotel_cost": 200
+        "price": 200,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
     },
     "Pennsylvania Railroad": {
-        "price": 400,
-        "rent": [25, 50, 100, 200]
+        "price": 200,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
     },
     "B. & O. Railroad": {
-        "price": 400,
-        "rent": [25, 50, 100, 200]
+        "price": 200,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
     },
     "Short Line Railroad": {
-        "price": 400,
-        "rent": [25, 50, 100, 200]
+        "price": 200,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
     }, 
      "Water Works": {
-        "price": 400,
-        "rent": [25, 50, 100, 200]
+        "price": 150,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
     },
     "Electric Company": {
-        "price": 400,
-        "rent": [25, 50, 100, 200]
-    },    
+        "price": 150,
+        "rent": [0, 25, 50, 100, 200, 400, 800]
+    }    
     
 }
-

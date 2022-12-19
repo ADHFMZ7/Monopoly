@@ -24,7 +24,6 @@ class Game:
   
     def win(self):
         if len(self.players) <= 1:
-            #print(f"{self.players[0].name} Wins!")
             return self.players[0]
     
     def remove_player(self, player):
@@ -42,6 +41,7 @@ class Player:
         self.jail = 0
         self.card = 0
         self.game = game
+        self.railroads = 0
 
     def take_turn(self):
         double = 0
@@ -85,8 +85,6 @@ class Player:
             self.space += number
            
     def rand_card(self):
-        self.goto_jail() 
-        return
         number = random.randint(1, 115)
         if number % 2 and number < 100:
             print(f"Collect ${2 * number}")
@@ -142,13 +140,14 @@ class Player:
             elif option == 2:
                 
                 print("Which property?")
-                for i, prop in enumerate(self.properties):
+                temp = [i for i in self.properties if not i.endswith("Railroad") and i not in ["Water Works", "Electric Company"]]
+                for i, prop in enumerate(temp):
                     print(f"{i} for {prop}") 
                 try:
                     if not self.properties:
                         print("No properties")
                         continue
-                    prop = self.properties[int(input("Property: "))]
+                    prop = temp[int(input("Property: "))]
                 except:
                     continue
                 self.buy_houses(prop)
@@ -218,7 +217,7 @@ class Player:
                     self.move(d1 + d2)
                     print("You are now out of jail!") 
                 else:
-                    print(f"You are still in jail. {self.jail}")
+                    print(f"You are still in jail.")
                 break
                     
             elif prompt == 3:
@@ -236,6 +235,10 @@ class Player:
              
                 
     def buy(self, square):
+        if square.endswith("Railroad"):
+            self.railroads += 1
+        if square in ["Electric Company", "Water Works"]:
+            self.railroads+= 1
         self.properties.append(square)
         PROPERTIES[square]["owner"] = self
         PROPERTIES[square]["houses"] = 0
@@ -259,8 +262,6 @@ class Player:
                 print(f"Bought one house for {prop}")
             else:
                 print("Cannot afford house")
-                
-        
         
         
     def pay(self, amount, reciever):
@@ -283,19 +284,25 @@ class Player:
 
             print(f"Their remaining balance of {self.money} after selling their property has been given to {recipient}")
             self.pay(self.money, recipient)
-        self.game.remove_player(self) # what the fuck
+        self.game.remove_player(self)
 
     def sell_property(self, property):
-        if PROPERTIES[property]["houses"] >= 5:
-            self.money += 0.5 * PROPERTIES[property]["hotel_cost"]
-            PROPERTIES[property]["houses"] -= 1
-        self.money += 0.5 * PROPERTIES[property]["houses"] * PROPERTIES[property]["hotel_cost"]
-        self.money += 0.5 * PROPERTIES[property]["price"]
-        PROPERTIES[property]["houses"] = 0
+        if not property.endswith("Railroad") and property not in ["Water Works", "Electric Company"]:
+            if PROPERTIES[property]["houses"] >= 5:
+                self.money += 0.5 * PROPERTIES[property]["hotel_cost"]
+                PROPERTIES[property]["houses"] -= 1
+            self.money += 0.5 * PROPERTIES[property]["houses"] * PROPERTIES[property]["hotel_cost"]
+            PROPERTIES[property]["houses"] = 0
         PROPERTIES[property]["owner"] = None
+        self.money += 0.5 * PROPERTIES[property]["price"]
 
     def pay_rent(self):
         spot = BOARD[self.space]
+
+            
         if spot in PROPERTIES.keys() and PROPERTIES[spot]["owner"] and PROPERTIES[spot]["owner"] != self:
+            if spot.endswith("Railroad") or spot in ["Water Works", "Electric Company"]:
+                self.pay(PROPERTIES[spot]["rent"][PROPERTIES[spot]["owner"].railroads], PROPERTIES[spot]["owner"])
+                return
             self.pay(PROPERTIES[spot]["rent"][PROPERTIES[spot]["houses"]], PROPERTIES[spot]["owner"])
          
