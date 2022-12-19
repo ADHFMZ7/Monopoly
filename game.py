@@ -53,6 +53,8 @@ class Player:
             self.move(d1+d2)
             self.evaluate_square()
             self.pay_rent()
+            if BOARD[self.space] == "Jail":
+                break
             if self.game.win():
                 return
             if d1 == d2 and double < 3:
@@ -67,6 +69,7 @@ class Player:
                 break
         
     def print_info(self):
+        print("\n") 
         print("="*30)
         print(f"{self.name}'s turn")
         print(f"Space #: {self.space}")
@@ -82,6 +85,8 @@ class Player:
             self.space += number
            
     def rand_card(self):
+        self.goto_jail() 
+        return
         number = random.randint(1, 115)
         if number % 2 and number < 100:
             print(f"Collect ${2 * number}")
@@ -167,45 +172,69 @@ class Player:
             
                 
     def jail_turn(self):
-        if self.jail == 3:
+        self.print_info() 
+        if self.jail == 4:
             print("You have been in jail for 3 turns. you must pay $50")
+            self.pay(50, 'bank') 
             self.jail = 0
-            self.take_turn()
-            return 
-        
-        print("You are in jail.")
-        print("type 1 to pay 50 and exit")
-        print("type 2 to roll dice")
-        print("type 3 to use a get out of jail card")
-        try:
-            prompt = int(input("enter option: ")) 
-        except:
-            print("Invalid choice. Try again")
-            self.jail_turn()
-        if prompt == 1:
-            if self.money >= 50:
-                self.pay(50, 'bank')
-                self.jail = 0
-            else:
-                print("You do not have enough money")
-                self.jail_turn()
-        elif prompt == 2:
-            d1, d2 = [random.randint(1, 6) for _ in range(2)]
-            if d1 == d2:
-                self.jail = 0
-                self.move(d1 + d2)
-        elif prompt == 3:
-            if self.card >= 1:
-                self.jail = 0
-                self.card -= 1
-            else:
-                print("You do not have any get out of jail cards")
-        else:
-            print("Invalid choice. Try again.")    
-            self.jail_turn()
-        
-        self.jail += 1
+            if not self.game.win():
+                print("You are now out of jail!")
+                self.take_turn()
+            return
+        while True:
+            self.jail += 1
             
+            
+            
+            print("\nYou are in jail.")
+            print("type 1 to pay 50 and exit")
+            print("type 2 to roll dice")
+            print("type 3 to use a get out of jail card")  
+            try:
+                prompt = int(input("enter option: ")) 
+            except:
+                print("Invalid choice. Try again")
+                continue
+        
+            if prompt not in [1, 2, 3]:
+                print("Invalid choice. Try again.")
+                continue
+
+
+            if prompt == 1:
+                if self.money >= 50:
+                    self.pay(50, 'bank')
+                    self.jail = 0
+                    print("You are now out of jail!")
+                    break
+                else:
+                    print("You do not have enough money")
+                    continue
+            elif prompt == 2:
+                d1, d2 = [random.randint(1, 6) for _ in range(2)]
+                print(f"You rolled a {d1} and a {d2}")
+                if d1 == d2:
+                    self.jail = 0
+                    self.move(d1 + d2)
+                    print("You are now out of jail!") 
+                else:
+                    print(f"You are still in jail. {self.jail}")
+                break
+                    
+            elif prompt == 3:
+                if self.card >= 1:
+                    self.jail = 0
+                    self.card -= 1
+                    print("You are now out of jail!")
+                    break
+                else:
+                    print("You do not have any get out of jail cards")
+                    continue
+            else:
+                print("Invalid choice. Try again.")    
+                continue
+             
+                
     def buy(self, square):
         self.properties.append(square)
         PROPERTIES[square]["owner"] = self

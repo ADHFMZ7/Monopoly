@@ -8,7 +8,7 @@ if __name__ == "__main__":
     while not game.win(): # replace with game condition function
         
         for player in game.get_players():
-            if player.jail in range(1,3):
+            if player.jail in [1, 2, 3, 4]:
                 player.jail_turn()
             else:
                 player.take_turn()
