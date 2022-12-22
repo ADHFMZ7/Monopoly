@@ -13,6 +13,3 @@ if __name__ == "__main__":
             else:
                 player.take_turn()
     print(f"{game.win().name} wins!")
-            
-             
-
